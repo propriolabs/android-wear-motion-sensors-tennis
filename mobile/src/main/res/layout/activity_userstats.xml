@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/profile_page"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/PrimaryDark"
+    android:weightSum="10">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="9"
+        >
+
+    <ImageView
+        android:id="@+id/google_icon"
+        android:contentDescription="@string/desc_google_icon"
+        android:src="@mipmap/logo_with_ball"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="top|center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rafa Nadal"
+        android:id="@+id/username"
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/primaryText"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="All Time Stats"
+        android:textStyle="bold"
+        android:id="@+id/titlestats"
+        android:textSize="20sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 hours 0 minutes"
+        android:id="@+id/playingtime"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hits: 0 strokes"
+        android:id="@+id/strokecount"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Longest Rally: 0 strokes"
+        android:id="@+id/longestrally"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Time Rankings"
+            android:textStyle="bold"
+            android:id="@+id/lastmonthsrank"
+            android:textSize="20sp"
+            android:textColor="@color/primaryText"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#0 in strokes"
+        android:id="@+id/hitrank"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#0 in max rally length"
+        android:id="@+id/maxrallyrank"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#0 in average rally length"
+        android:id="@+id/meanrallyrank"
+        android:textSize="14sp"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="invisible"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp">
+
+            <Button
+                android:id="@+id/performanceovertime"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:text="Performance \n over Time"
+                android:layout_gravity="center_horizontal"
+                android:background="@color/PrimaryLight"
+                android:textColor="@color/primaryText"
+                android:theme="@color/PrimaryLight"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/rankings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="Game Tree \n Last Match"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/PrimaryLight"
+            android:textColor="@color/primaryText"
+            android:theme="@color/PrimaryLight"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="invisible"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/tweetuserdetails"
+                android:visibility="gone"
+                >
+
+            <ImageButton
+                android:id="@+id/tweet"
+                android:src="@mipmap/twitter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
+                android:text="Tweet Stats"
+                android:layout_gravity="left"
+                android:background="@color/Primary"
+                android:textColor="@color/primaryText"
+                android:theme="@color/PrimaryLight"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="visible"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tweet your overall stats"
+                    android:id="@+id/details"
+                    android:textSize="14sp"
+                    android:textColor="@color/primaryText"
+                    android:visibility="visible"
+                    android:layout_marginTop="15dp" />
+
+                </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/mainapp2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Go Play"
+        android:background="@color/accent"
+        android:textColor="@color/primaryText"
+        android:theme="@color/PrimaryLight"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
+
+</LinearLayout>

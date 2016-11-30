@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Primary"
+    android:orientation="vertical"
+    android:id="@+id/feedback"
+    tools:context=".FaqActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="26sp"
+        android:text="FAQ"
+        android:id="@+id/textView6"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Why aren't my swings getting counted?"
+        android:id="@+id/textView7"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="There are a couple possibilities. (1) If you're using a 1st generation Moto 360 or an LG Watch Urbane, we won't be able to successfully track your strokes. Tennis Sense is ideal on the Moto 360 Sport and Sony Smartwatch 3 because they have the best motion sensors. (2) If you're not connected to either the Internet or 4g, then you won't be able to track your strokes. (3) If your watch is too far away from the mobile phone or if there is a physical block between the two devices, you won't be able to track your strokes. The max distance between the watch and mobile varies depending on the watch. In general, you should be able to leave your phone out on the side of the court. (4) If the phone and watch seem to be out of sync, then close the app on the phone and watch and re-open."
+        android:id="@+id/textView8"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Where do I see information on my score"
+        android:id="@+id/textView700"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="As you play, announce the score of the game normally. You'll notice on the watch screen that the score flashes whatever score (in English) that you just announced. So, if you announce 30-15, the watch face will show 30-15. An upcoming version of the app will show the distribution of your score over the course of the match. We're using 'Google Assistant,' so please make sure to speak clearly when announcing the score."
+        android:id="@+id/textView800"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Where do I see information on my heart rate"
+        android:id="@+id/textView70"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="If you have a watch with a heart rate monitor, then you can check out the heart rate in the match stats visualizations. If you have a watch with no heart rate monitor, then you won't see your heart rate"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Can I reach out to you directly and ask questions or suggest features?"
+        android:id="@+id/textView9"
+        android:layout_gravity="left|center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:id="@+id/feedbackText1"
+        android:textColor="@color/primaryText"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"/>
+    
+</LinearLayout>
+</ScrollView>

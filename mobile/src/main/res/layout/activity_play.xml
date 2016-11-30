@@ -1,0 +1,241 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/Primary"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:id="@+id/mainlayout"
+    android:weightSum="7"
+    tools:context=".CollectData"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/recordingstatus"
+        android:text="@string/recordinginfo"
+        android:textColor="@color/primaryText"
+        android:layout_gravity="center|fill"
+        android:gravity="center"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:visibility="visible"/>
+
+    <Chronometer
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:textColor="@color/icons"
+        android:background="@color/Primary"
+        android:textSize="30sp"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:layout_gravity="center|fill"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lastDataSent"
+        android:text=""
+        android:textColor="@color/primaryText"
+        android:layout_gravity="center|fill"
+        android:gravity="center"
+        android:foregroundGravity="center_vertical|center|center_horizontal"
+        android:visibility="visible"/>
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="6"
+        android:weightSum="6"
+        android:stretchColumns="*"
+        android:visibility="visible"
+        android:id="@+id/stroketable">
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/forehand_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image"
+                android:src="@mipmap/stockforehand"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical|right" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Forehands"
+                android:id="@+id/forehandText"
+                android:layout_gravity="center_vertical|left"
+                android:textColor="@color/forehands" />
+
+            <TextView
+                android:background="@drawable/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/n_forehands"
+                android:textColor="@color/primaryText"
+                android:text="@string/startcounter"
+                android:textSize="30sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_column="1"
+                android:height="50dp"
+                android:width="50dp"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/backhand_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image"
+                android:src="@mipmap/stockbackhand"
+                android:layout_column="0"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical|right" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Backhands"
+                android:id="@+id/backhandText"
+                android:layout_gravity="center_vertical|left"
+                android:textColor="@color/backhands" />
+
+            <TextView
+                android:background="@drawable/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/n_backhands"
+                android:textColor="@color/primaryText"
+                android:text="@string/startcounter"
+                android:textSize="30sp"
+                android:layout_column="1"
+                android:height="50dp"
+                android:width="50dp"
+                android:layout_gravity="center"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_weight="1" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2">
+
+            <ImageView
+                android:id="@+id/serve_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/image"
+                android:src="@mipmap/stockserve"
+                android:layout_column="0"
+                android:layout_gravity="center_vertical|right"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Serves"
+                android:id="@+id/serveText"
+                android:layout_gravity="center_vertical|left"
+                android:textColor="@color/serves" />
+
+            <TextView
+                android:background="@drawable/circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/n_serves"
+                android:textColor="@color/primaryText"
+                android:text="@string/startcounter"
+                android:textSize="30sp"
+                android:gravity="center_vertical|center_horizontal"
+                android:layout_column="1"
+                android:height="50dp"
+                android:width="50dp"
+                android:layout_gravity="center"
+                android:layout_weight="1" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center|center_vertical">
+    </LinearLayout>
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/radiogroup"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Match"
+            android:id="@+id/radioMatch"
+            android:checked="true"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Practice"
+            android:id="@+id/radioPractice" />
+    </RadioGroup>
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/addlabel"
+        android:id="@+id/spin"
+        android:height="200dp"
+        android:spinnerMode="dialog"
+        android:prompt="@string/spin_prompt"
+        android:entries="@array/spinnerItems"
+        android:textColor="@color/primaryText"
+        android:background="@color/PrimaryLight"
+        android:visibility="invisible"/>
+
+    <Button
+    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+        android:layout_weight="1"
+        android:text="@string/getstarted"
+    android:id="@+id/startApp"
+    android:textColor="@color/primaryText"
+        android:background="@color/accent"
+        android:visibility="invisible"
+    android:enabled="false" />
+
+
+
+</LinearLayout>

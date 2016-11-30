@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colors -->
+    <color name="Primary">#FFFFFF</color>
+    <color name="PrimaryDark">#FFFFFF</color>
+    <color name="PrimaryLight">#d3d3d3</color>
+    <color name="accent">#00a6f5</color>
+    <color name="primaryText">#212121</color>
+    <color name="secondaryText">#212121</color>
+    <color name="icons">#000000</color>
+    <color name="divider">#B6B6B6</color>
+    <color name="tennisball">#FFEB3B</color>
+    <color name="forehands">#000000</color>
+    <color name="backhands">#000000</color>
+    <color name="serves">#000000</color>
+    <!-- General -->
+    <string name="app_name">Tennis Sense</string>
+    <string name="title_text">Tennis Sense</string>
+    <string name="proprio_data_directory">/proprio</string>
+    <!--List of User with Access to Labeling Mode and Local Collect Mode-->
+    <string-array name="masterUsers">
+        <item>105...</item> <!-- Superman -->
+    </string-array>
+
+    <!--Local Development-->
+    <string name="data_server">https://192.168.1....:8080</string>
+    <string name="analysis_server">http://192.168.1....:5000</string>
+
+
+    <!-- APIs and Secrets -->
+    <string name="open_weather_maps_app_id"></string>
+    <string name="TWITTER_KEY"></string>
+    <string name="TWITTER_SECRET"></string>
+    <string name="facebook_app_id"></string>
+
+    <!-- Sign-in status messages -->
+    <string name="signed_in_fmt">%s\'s Settings</string>
+    <string name="signing_in">Signing in…</string>
+    <string name="signed_out">Please sign in to get started</string>
+    <string name="signed_in_err">"Error: please check logs."</string>
+    <string name="error_null_person">
+        Error: Plus.PeopleApi.getCurrentPerson returned null. Ensure that the Google+ API is
+        enabled for your project, you have a properly configured google-services.json file
+        and that your device has an internet connection.
+    </string>
+    <!-- Google Play Services error for Toast -->
+    <string name="play_services_error_fmt">Google Play Services Error: %i</string>
+    <!-- Button labels -->
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <!-- Content Description for images -->
+    <string name="desc_google_icon">Proprio Logo</string>
+    <!--Other -->
+    <string name="getstarted">Play</string>
+    <string name="startcounter">0</string>
+    <string name="recordinginfo">Ready!</string>
+    <string name="image">Icons</string>
+    <string name="addlabel">Add Label</string>
+
+    <string name="invitation_title">Tennis Sense</string>
+    <string name="invitation_message">Download Tennis Sense, a smart watch app that tracks strokes and more</string>
+    <string name="invitation_deep_link">Placeholder</string>
+    <string name="invitation_custom_image">http://propriolabs.com/img/SmartWatch_TennisSense.png</string>
+    <string name="invitation_cta">Calling</string>
+    <string name="sent_invitations_fmt">FORMAT</string>
+    <string name="send_failed">Failure</string>
+    <!-- Rationale for asking for Contacts -->
+    <string name="contacts_permission_rationale">Contacts access is needed in order to retrieve your email address.</string>
+    <!-- Spinners on Settings Page -->
+    <string-array name="spinnerGender">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="spinnerHand">
+        <item>Righty</item>
+        <item>Lefty</item>
+    </string-array>
+    <string-array name="spinnerBezel">
+        <item>Towards Wrist</item>
+        <item>Away from Wrist</item>
+    </string-array>
+    <string-array name="spinnerHeight">
+        <item>&lt;4\' 5\"</item>
+        <item>4\' 5\"</item>
+        <item>4\' 6\"</item>
+        <item>4\' 7\"</item>
+        <item>4\' 8\"</item>
+        <item>4\' 9\"</item>
+        <item>4\' 10\"</item>
+        <item>4\' 11\"</item>
+        <item>5\' 0\"</item>
+        <item>5\' 1\"</item>
+        <item>5\' 2\"</item>
+        <item>5\' 3\"</item>
+        <item>5\' 4\"</item>
+        <item>5\' 5\"</item>
+        <item>5\' 6\"</item>
+        <item>5\' 7\"</item>
+        <item>5\' 8\"</item>
+        <item>5\' 9\"</item>
+        <item>5\' 10\"</item>
+        <item>5\' 11\"</item>
+        <item>6\' 0\"</item>
+        <item>6\' 1\"</item>
+        <item>6\' 2\"</item>
+        <item>6\' 3\"</item>
+        <item>6\' 4\"</item>
+        <item>6\' 5\"</item>
+        <item>6\' 6\"</item>
+        <item>6\' 7\"</item>
+        <item>6\' 8\"</item>
+        <item>>6\' 8\"</item>
+    </string-array>
+    <string-array name="spinnerAge">
+        <item>&lt;5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>68</item>
+        <item>69</item>
+        <item>70</item>
+        <item>71</item>
+        <item>72</item>
+        <item>73</item>
+        <item>74</item>
+        <item>75</item>
+        <item>76</item>
+        <item>77</item>
+        <item>78</item>
+        <item>79</item>
+        <item>80</item>
+        <item>81</item>
+        <item>82</item>
+        <item>83</item>
+        <item>84</item>
+        <item>85</item>
+        <item>86</item>
+        <item>87</item>
+        <item>88</item>
+        <item>89</item>
+        <item>90</item>
+        <item>>90</item>
+    </string-array>
+    <string-array name="spinnerUSTA">
+        <item>Unknown</item>
+        <item>1.0</item>
+        <item>1.5</item>
+        <item>2.0</item>
+        <item>2.5</item>
+        <item>3.0</item>
+        <item>3.5</item>
+        <item>4.0</item>
+        <item>4.5</item>
+        <item>5.0</item>
+        <item>5.5</item>
+        <item>6.0</item>
+        <item>6.5</item>
+        <item>7.0</item>
+    </string-array>
+
+    <string-array name="spinnerPrivacy">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
+    <string-array name="spinnerLabelMode">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
+    <string name="button_send">+</string>
+    <string name="action_settings">Settings</string>
+    <string name="spin_prompt">Choose an Activity</string>
+    <string-array name="spinnerItems">
+        <item>Tennis</item>
+        <item>Custom</item>
+        <item>Boxing</item>
+        <item>Frisbee</item>
+        <item>Golf</item>
+        <item>Gym</item>
+        <item>Swimming</item>
+    </string-array>
+    <string-array name="Custom">
+    </string-array>
+    <string-array name="Tennis">
+        <item>Forehand</item>
+        <item>Backhand</item>
+        <item>Serve</item>
+    </string-array>
+    <string-array name="Baseball">
+        <item>Throw</item>
+        <item>Catch</item>
+    </string-array>
+
+    <string-array name="Basketball">
+        <item>Shot</item>
+        <item>Dribble</item>
+    </string-array>
+
+    <string-array name="Boxing">
+        <item>Jab</item>
+        <item>Cross</item>
+        <item>Hook</item>
+        <item>Uppercut</item>
+    </string-array>
+
+    <string-array name="FlyFishing">
+        <item>Cast</item>
+        <item>Catch</item>
+    </string-array>
+
+    <string-array name="Football">
+        <item>Throw</item>
+        <item>Catch</item>
+    </string-array>
+
+    <string-array name="Frisbee">
+        <item>Throw</item>
+        <item>Catch</item>
+    </string-array>
+
+    <string-array name="Golf">
+        <item>Drive</item>
+        <item>Put</item>
+    </string-array>
+
+    <string-array name="Gym">
+        <item>Bicep Curl</item>
+        <item>Bench Press</item>
+        <item>Pull Up</item>
+        <item>Shrug</item>
+        <item>Dip</item>
+    </string-array>
+
+    <string-array name="Swimming">
+        <item>Breast</item>
+        <item>Butterfly</item>
+        <item>Free-style</item>
+    </string-array>
+
+
+
+</resources>

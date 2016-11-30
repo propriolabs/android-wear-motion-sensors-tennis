@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tennis Sense</string>
+
+    <bool name="label_with_audio">true</bool>
+    <bool name="score_with_audio">true</bool>
+
+    <color name="forehands">#e0162b</color>
+    <color name="backhands">#FFFFFF</color>
+    <color name="serves">#00abff</color>
+    <color name="text">#00FF00</color>
+    <color name="background_off">#D3D3D3</color>
+    <color name="background_on">#000000</color>
+
+
+
+
+    <string-array name="spinnerItems">
+        <item>Custom</item>
+        <item>Tennis</item>
+        <item>Baseball</item>
+        <item>Basketball</item>
+        <item>Boxing</item>
+        <item>FlyFishing</item>
+        <item>Football</item>
+        <item>Frisbee</item>
+        <item>Golf</item>
+        <item>Gym</item>
+        <item>Swimming</item>
+    </string-array>
+
+</resources>

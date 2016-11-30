@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.propriolabs.thetennissense" >
+
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:name=".GoogleAnalyticsTracker">
+        <activity
+            android:name="com.propriolabs.thetennissense.LandingSignIn"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".SettingsPage"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".SettingsPage" >
+        </activity>
+        <activity
+            android:name=".CollectData"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".CollectData" >
+        </activity>
+        <activity
+            android:name=".FaqActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".FaqActivity" >
+        </activity>
+        <activity
+            android:name="com.propriolabs.thetennissense.ProgressActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:parentActivityName="com.propriolabs.thetennissense.ProgressActivity" >
+        </activity>
+        <activity
+            android:name="com.propriolabs.thetennissense.AnalysisActivity"
+            android:label="@string/app_name"
+            android:parentActivityName="com.propriolabs.thetennissense.AnalysisActivity" >
+        </activity>
+        <activity
+            android:name=".SessionActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".SessionActivity" >
+        </activity>
+        <activity
+            android:name=".UserStats"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".UserStats" >
+        </activity>
+        <activity android:name="com.propriolabs.thetennissense.OnboardingActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.propriolabs.thetennissense.NoAndroidWear"
+            android:screenOrientation="portrait" />
+        <service android:name="com.propriolabs.thetennissense.DataLayerListenerServicePhone" >
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/PING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/WATCH_UP" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="test" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/DESTROYED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/SCORE" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/LABEL" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/DESTROYED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/ACCELERATION_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/GYROSCOPE_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/ROTATION_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/GRAVITY_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/SENSORS_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/ROTATION_LACKING" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/WEAR2PHONE" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/DATA" />
+            </intent-filter>
+        </service>
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="" />
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+    </application>
+</manifest>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_off"
+    android:id="@+id/main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical|center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not Recording"
+            android:textColor="@color/background_on"
+            android:id="@+id/score"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ready!"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/actionStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/digitalClock"
+            android:textColor="@color/text"
+            android:visibility="invisible" />
+
+        <DigitalClock
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/digitalClock"
+            android:textColor="@color/text"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/chronometer"
+            android:visibility="visible"
+            />
+
+        <Chronometer
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chronometer"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/numForehandsWatch"
+            android:textColor="@color/text"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 Forehands"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/numForehandsWatch"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/forehands"
+            android:visibility="visible"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 Backhands"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/numForehandsWatch"
+            android:id="@+id/numBackhandsWatch"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/backhands"
+            android:visibility="visible"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 Serves"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:layout_below="@+id/numBackhandsWatch"
+            android:id="@+id/numServesWatch"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/serves"
+            android:visibility="visible"
+            android:layout_marginBottom="0dp"
+            android:paddingBottom="0dp" />
+
+        <com.hookedonplay.decoviewlib.DecoView
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/dynamicArcView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+

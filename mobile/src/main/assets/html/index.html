@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<head>
+<head>
+	<script type="text/javascript" src="file:///android_asset/js/d3.min.js" ></script>
+	<script type="text/javascript" src="file:///android_asset/js/simple_statistics.min.js"></script>
+	<script type="text/javascript" src="file:///android_asset/js/underscore-min.js"></script>
+	<style>
+		#xaxis .domain {
+		fill:none;
+		stroke:#FFFFFF;
+		}
+		#xaxis text, #yaxis text {
+		font-size: 12px;
+		}
+		#yaxis line, .yaxis path {
+		stroke: white;
+		}
+		#yaxis .domain {
+		fill:none;
+		stroke:#FFFFFF;
+		}
+		.frame {
+		fill: none;
+		stroke: #000;
+		}
+
+		.axis {
+		font: 10px sans-serif;
+		}
+
+		.axis path,
+		.axis line {
+		fill: none;
+		stroke: #000;
+		shape-rendering: crispEdges;
+		}
+
+		.axis line,
+		.axis circle {
+		fill: none;
+		stroke: steelblue;
+		stroke-dasharray: 4;
+		}
+
+		.axis:last-of-type circle {
+		stroke: steelblue;
+		stroke-dasharray: none;
+		}
+
+		.line {
+		fill: none;
+		stroke: red;
+		stroke-width: 3px;
+		}
+
+
+		.axis {
+		font: 10px sans-serif;
+		}
+
+		.axis path,
+		.axis line {
+		fill: none;
+		stroke: black;
+		shape-rendering: crispEdges;
+		}
+
+		#xaxis_bar path {
+		display: none;
+		}
+
+		.y.axis path {
+		display: none;
+		}
+
+
+		body{font-family: Arial, sans-serif;font-size:10px;}
+		.axis path,.axis line {fill: none;stroke:#b6b6b6;shape-rendering: crispEdges;}
+		g.journal.active{cursor:pointer;}
+		text.label{font-size:12px;font-weight:bold;cursor:pointer;}
+		text.value{font-size:12px;font-weight:bold;}
+	</style>
+    <script type="text/javascript">
+ function loadCharts(json_out){
+
+	    var margin = {top: 40, right: 20, bottom: 40, left: 20}
+		ww = document.getElementById("chart0").clientWidth,
+		width = ww - margin.left - margin.right,
+		height = 500 - margin.top - margin.bottom,
+		radius = Math.min(width, height) / 2 - 30;
+		var FOREHANDS = "Forehands";
+		var BACKHANDS = "Backhands";
+		var SERVES = "Serves";
+		var categories=[FOREHANDS,BACKHANDS,SERVES]
+		var colors = ['#d3d3d3','#00abff','#e0162b'];
+
+		var counts=[];
+		counts.push({'letter':FOREHANDS, 'frequency':json_out.aggregate[FOREHANDS]});
+		counts.push({'letter':BACKHANDS, 'frequency':json_out.aggregate[BACKHANDS]});
+		counts.push({'letter':SERVES, 'frequency':json_out.aggregate[SERVES]});
+
+
+
+
+var colorScale = d3.scale.ordinal()
+						.domain([0,categories.length])
+						.range(colors);
+
+
+var x1 = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .2);
+
+var y1 = d3.scale.linear()
+    .range([height*.5, 0]);
+
+var xAxis1 = d3.svg.axis()
+    .scale(x1)
+    .orient("bottom");
+
+var yAxis1 = d3.svg.axis()
+    .scale(y1)
+    .orient("left")
+    .tickFormat(function (d) { return ''; })
+    .ticks(0, "%");
+
+var svg1 = d3.select("#chart0").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height*.5 + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  x1.domain(counts.map(function(d) { return d.letter; }));
+  y1.domain([0, d3.max(counts, function(d) { return d.frequency; })]);
+
+  svg1.append("g")
+      .attr("class", "x axis")
+      .attr("id","xaxis_bar")
+      .attr("transform", "translate(0," + height*.5 + ")")
+      .call(xAxis1);
+
+  svg1.append("g")
+      .attr("class", "y axis")
+      .call(yAxis1)
+
+svg1.select('#xaxis_bar').selectAll('g.tick').selectAll('text').attr('font-size','12px').attr('font-weight','bold').attr('fill', function(d,i){if(d==BACKHANDS){
+      		return colorScale(2);
+      	}
+      	else if(d==FOREHANDS){
+      		return colorScale(1);
+      	}
+        else if(d==SERVES){
+        	return colorScale(3);
+        }});
+
+  svg1.append("g").selectAll(".bar")
+    .attr("id","bars")
+      .data(counts)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x1(d.letter); })
+      .attr("width", x1.rangeBand())
+      .attr("y", function(d) { return Math.min(y1(d.frequency),175); })
+      .attr("fill", function(d,i){
+      	if(d.letter==BACKHANDS){
+      		return colorScale(2);
+      	}
+      	else if(d.letter==FOREHANDS){
+      		return colorScale(1);
+      	}
+        else if(d.letter==SERVES){
+        	return colorScale(3);
+        }})
+      .attr("height", function(d) {console.log(height*.5-y1(d.frequency));return height*.5 - Math.min(y1(d.frequency),175); });
+
+
+  svg1.append("g").selectAll("text")
+	  .data(counts)
+	  .enter()
+	  .append("text")
+	  .attr("x", function(d) { return x1(d.letter)+x1.rangeBand()/2})
+	  .attr("y", function(d) { return Math.min(y1(d.frequency) + 20,height*.5-20); })
+	  .attr("text-anchor", "middle")
+	  .text(function(d) { return d.frequency;})
+	  .attr("fill", "white");
+
+
+function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+
+    function truncate(str, maxLength, suffix) {
+	if(str.length > maxLength) {
+		str = str.substring(0, maxLength + 1);
+		str = str.substring(0, Math.min(str.length, str.lastIndexOf(" ")));
+		str = str + suffix;
+	}
+	return str;
+	}
+
+
+	var c = d3.scale.category20c();
+
+	var x = d3.scale.linear()
+		.range([0, width]);
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("top");
+
+	Array.max = function( array ){
+		return Math.max.apply( Math, array );
+	};
+	Array.min = function( array ){
+		return Math.min.apply( Math, array );
+	};
+
+	var timeFormat = d3.time.format("%I:%M %p %a %Y");
+
+	var svg = d3.select('#chart2')
+			.append('svg')
+			.attr("width", width+margin.left+margin.right)
+			.attr("height", height/2)
+			.style("margin-left", margin.left + "px")
+			.append("g")
+			.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+	var ts=[]
+	for(key in json_out.timestamped){
+		for(i in json_out.timestamped[key]){
+			ts.push(json_out.timestamped[key][i].time)
+		}
+	}
+    //console.log(json_out.timestamped)
+	//json_out.timestamped[0] = json_out.timestamped.splice(1, 1, json_out.timestamped[0])[0];
+
+	x.domain([Math.min(...ts),Math.max(...ts)]);
+
+	var xScale = d3.scale.linear()
+	.domain([Math.min(...ts),Math.max(...ts)])
+	.range([0,width*.75]);
+
+	var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .tickValues(x.domain())
+                  .tickFormat(function(d){return d3.time.format("%I:%M %p")	(new Date(d));})
+                  .orient("bottom");
+
+	svg.append("g")
+		.attr("class", "x axis")
+		.attr("transform", "translate(50," + 100 + ")")
+		.call(xAxis);
+
+	// for (var j = 0; j < json_out.timestamped.length; j++) {
+	var m = -1;
+	for (var j in json_out.timestamped) {
+		m++;
+		var g = svg.append("g").attr("class","journal");
+		// var name=json_out.timestamped[j]['name'];
+		var name=j;
+		var circles = g.selectAll("circle")
+			.data(json_out.timestamped[j])
+			.enter()
+			.append("circle");
+
+		var text = g.selectAll("text")
+			.data(json_out.timestamped[j])
+			.enter()
+			.append("text");
+
+		var rScale = d3.scale.linear()
+			.domain([0, d3.max(json_out.timestamped[j], function(d) { return Math.round(d.max_speed); })])
+			.range([2, 9]);
+
+		circles
+			.attr("cx", function(d, i) {return xScale(d.time); })
+			.attr("cy", m*20+20)
+			.attr("r", function(d) { return 0.5*rScale(d.max_speed); })
+			.attr("transform", "translate(60," + 0 + ")")
+			.style("fill", function(d) {if(name==BACKHANDS){
+      		return colorScale(2);
+		      	}
+		      	else if(name==FOREHANDS){
+		      		return colorScale(1);
+		      	}
+		        else if(name==SERVES){
+		        	return colorScale(3);
+		        }});
+
+		text
+			.attr("y", m*20+25)
+			.attr("x",function(d, i) { return xScale(d.time); })
+			.attr("class","value")
+			.text(function(d){ return Math.round(d.max_speed); })
+			.style("fill", function(d) {if(name==BACKHANDS){
+      		return colorScale(2);
+		      	}
+		      	else if(name==FOREHANDS){
+		      		return colorScale(1);
+		      	}
+		        else if(name==SERVES){
+		        	return colorScale(3);
+		        }})
+			.attr("transform", "translate(60," + 0 + ")")
+			.style("display","none");
+
+		g.append("text")
+			.attr("y", m*20+25)
+			.attr("x",-20)
+			.attr("class","label")
+			.text(truncate(name,30,"..."))
+			.style("fill", function(d) {if(name==BACKHANDS){
+      		return colorScale(2);
+		      	}
+		      	else if(name==FOREHANDS){
+		      		return colorScale(1);
+		      	}
+		        else if(name==SERVES){
+		        	return colorScale(3);
+		        }})
+			.on("mouseover", mouseover)
+			.on("mouseout", mouseout);
+	};
+
+	function mouseover(p) {
+		var g = d3.select(this).node().parentNode;
+		d3.select(g).selectAll("circle").style("display","none");
+		d3.select(g).selectAll("text.value").style("display","block");
+	}
+
+	function mouseout(p) {
+		var g = d3.select(this).node().parentNode;
+		d3.select(g).selectAll("circle").style("display","block");
+		d3.select(g).selectAll("text.value").style("display","none");
+	}
+
+	// left off here...
+	var keys = [];
+	console.log(JSON.stringify(json_out.timestamped));
+	for(var kk in json_out.timestamped){
+		keys.push(kk);
+	}
+	console.log(keys);
+	/*
+	var acc=_.map(keys,function(x){return([json_out.timestamped[x],x])});
+    //var acc=_.map(json_out.timestamped,function(x){return([x.swings,x.name])});
+    console.log(acc);
+
+    acc=_.flatten(_.map(acc,function(x){return _.map(x[0],function(y){return [y.max_acceleration,x[1]]})}),true)
+    // acc=_.flatten(_.map(acc,function(x){return _.map(x[0],function(y){return [y[1],x[1]]})}),true)
+    swings=_.map(acc, function(x){return x[0]})
+    //var percentiles=_.map(acc,function(x){return ss.quantile(acc,x)})
+    //acc.sort(function(a, b){return a-b});
+    ecdf=[]
+    var uniq_stroke=_.uniq(acc)
+    for(var i=0;i<swings.length;i++){
+        var count=_.map(swings,function(x){return x<=swings[i]})
+        var count2=_.reduce(count, function(memo, num){ return memo + num; }, 0);
+        ecdf.push(count2)
+    }
+    n_stroke = acc.length
+    qdist=_.map(ecdf,function(x){return Math.abs(0.5-x/n_stroke)})
+    data=_.zip(_.map(d3.range(0, 360, 360/n_stroke),function(x){return (Math.PI*x)/180}),qdist,_.map(acc,function(x){return x[1]}))
+    //this filters edge case in which some strokes are zero causing black dots
+    data = _.filter(data, function(x){return !_.isUndefined(x[1])})
+
+    var r = d3.scale.linear()
+      .domain([0, 1])
+      .range([0, radius]);
+
+    var line = d3.svg.line.radial()
+      .radius(function(d) {
+        return r(d[1]);
+      })
+      .angle(function(d) {
+        return -d[0] + Math.PI / 2;
+      });
+
+    var svg = d3.select("#chart3").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2.3 + ")");
+
+
+    var gr = svg.append("g")
+      .attr("class", "r axis")
+      .selectAll("g")
+      .data(r.ticks(4).slice(2,6))
+      .enter().append("g");
+
+
+    gr.append("circle")
+      .attr("r", r);
+
+
+    var ga = svg.append("g")
+      .attr("class", "a axis")
+      .selectAll("g")
+      .data(d3.range(0, 360, 360/n_stroke))
+      .enter().append("g")
+      .attr("transform", function(d) {
+        return "rotate(" + -d + ")";
+      });
+
+    ga.append("line")
+      .attr("x2", radius);
+
+    var color = d3.scale.category20();
+
+    var line = d3.svg.line.radial()
+      .radius(function(d) {
+        return r(d[1]);
+      })
+      .angle(function(d) {
+        return -d[0] + Math.PI / 2;
+      });
+
+
+    svg.selectAll("point")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "point")
+      .attr("transform", function(d) {
+        var coors = line([d]).slice(1).slice(0, -1);
+        return "translate(" + coors + ")"
+      })
+      .attr("r", 8)
+      .attr("fill",function(d,i){
+      	console.log(d)
+      	if(d[2]==BACKHANDS){
+      		return colorScale(2);
+      	}
+      	else if(d[2]==FOREHANDS){
+      		return colorScale(1);
+      	}
+       else if(d[2]==SERVES){
+      		return colorScale(3);
+      	}
+      });
+*/
+
+
+dataset_hr=json_out.heartrate
+
+//this checks whether the heartrate contains non-zero values
+arr = dataset_hr.filter(function(n) {return n.hr;});
+if(arr.length>0){
+
+
+
+
+var xScalehr = d3.scale.linear()
+    .domain([d3.min(dataset_hr,function(d){return d.watchtime;}), d3.max(dataset_hr, function(d){ return d.watchtime; })])
+    .range([0, width*0.95]);
+
+var yScalehr = d3.scale.linear()
+    .domain([d3.min(dataset_hr,function(d){return d.hr;}), d3.max(dataset_hr, function(d){ return d.hr; })])
+    .range([height, 0]);
+
+var xAxishr = d3.svg.axis()
+    .scale(xScalehr)
+    .orient("bottom")
+    .outerTickSize(0)
+    .ticks(3)
+    .tickFormat(function(d){return d3.time.format("%I:%M %p")	(new Date(d));})
+    .tickPadding(10);
+
+var yAxishr = d3.svg.axis()
+    .scale(yScalehr)
+    .orient("left")
+    .innerTickSize(-width)
+    .outerTickSize(0)
+    .tickPadding(10);
+
+var linehr = d3.svg.line()
+    .x(function(d) { return xScalehr(d.watchtime); })
+    .y(function(d) { return yScalehr(d.hr); });
+
+margin.left=30
+
+var svghr = d3.select("#charthr").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  svghr.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxishr)
+
+  svghr.append("g")
+      .attr("class", "y axis")
+      .call(yAxishr)
+
+  svghr.append("path")
+      .data([dataset_hr])
+      .attr("class", "line")
+      .attr("stroke","red")
+      .attr("d", linehr);
+
+  svghr.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .text("Heartrate");
+
+
+}
+
+
+
+
+
+}
+
+</script>
+</head>
+<body><div id="chart0"></div></div><div id="chart1"></div><div id="chart2"></div>
+<div id="charthr"></div>
+<!--<div id="chart3"><center><h3>Shot Consistency</center></h3></div>
+-->
+</body>
+</html>

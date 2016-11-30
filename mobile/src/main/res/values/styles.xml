@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2015. Proprio Labs
+  -->
+
+<resources>
+
+     Base application theme.
+    <style name="AppTheme" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="windowActionBar">true</item>
+        <item name="windowNoTitle">false</item>
+    </style>
+
+    <style name="MyButtonStyleSmall" parent="android:Widget.Button.Small">
+        <!-- Customizations  -->
+        <item name="android:minHeight">1dp</item>
+        <item name="android:minWidth">1dp</item>
+    </style>
+
+    <!-- Dark Buttons -->
+    <style name="AppTheme.MyDarkButton" parent="AppTheme">
+        <item name="colorButtonNormal">@color/accent</item>
+    </style>
+
+
+
+
+</resources>

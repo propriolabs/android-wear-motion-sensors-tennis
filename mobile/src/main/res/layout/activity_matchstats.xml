@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/PrimaryDark"
+    android:orientation="vertical"
+    >
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/proftable"
+        android:divider="@color/divider"
+        android:gravity="center"
+        android:measureWithLargestChild="false"
+        android:showDividers="middle|beginning|end"
+        android:visibility="visible"
+        android:stretchColumns="*">
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/booya"
+        android:background="@color/PrimaryDark">
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Me"
+            android:id="@+id/personal"
+            android:background="@color/accent"
+            android:textColor="@color/Primary"
+             />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Everybody"
+            android:background="@color/primaryText"
+            android:textColor="@color/Primary"
+            android:id="@+id/global"
+            />
+    </TableRow>
+    </TableLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/emptyMessage"
+        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    <ImageButton
+        android:id="@+id/tweetlastsession"
+        android:src="@mipmap/twitter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Share Last Match on Twitter"
+        android:layout_gravity="left|center_horizontal"
+        android:background="@color/Primary"
+        android:textColor="@color/primaryText"
+        android:theme="@color/PrimaryLight"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tweet about your latest tennis match"
+            android:layout_gravity="center"
+            android:id="@+id/tweetexplainer"
+            android:visibility="gone"/>
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/rv"
+        >
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+    <title>Tennis Sense</title>
+    <!--<script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>-->
+    <script type="text/javascript" src="file:///android_asset/js/d3.min.js" ></script>
+    <script type="text/javascript" src="file:///android_asset/js/simple_statistics.min.js"></script>
+    <script type="text/javascript" src="file:///android_asset/js/underscore-min.js"></script>
+    <style>
+    # xaxis.domain {
+        fill: none;
+        stroke: # FFFFFF;
+    }
+# xaxis text, # yaxis text {
+    font - size: 12 px;
+}
+# yaxis line, .yaxis path {
+    stroke: white;
+}
+# yaxis.domain {
+        fill: none;
+        stroke: # FFFFFF;
+    }
+    .frame {
+        fill: none;
+        stroke: #000;
+  }
+  
+  .axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: # 000;
+        shape - rendering: crispEdges;
+    }
+
+.axis line,
+.axis circle {
+    fill: none;
+    stroke: steelblue;
+    stroke - dasharray: 4;
+}
+
+.axis: last - of - type circle {
+    stroke: steelblue;
+    stroke - dasharray: none;
+}
+
+.line {
+    fill: none;
+    stroke: orange;
+    stroke - width: 3 px;
+}
+
+
+.axis {
+    font: 10 px sans - serif;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape - rendering: crispEdges;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.gx.axis path {
+    display: none;
+}
+
+
+.y.axis path {
+    display: none;
+}
+
+
+body {
+    font - family: Arial, sans - serif;
+    font - size: 10 px;
+}
+.axis path, .axis line {
+    fill: none;stroke: # b6b6b6;shape - rendering: crispEdges;
+}
+/*.tick line{fill:none;stroke:none;}*/
+/*.tick text{fill:#999;}*/
+g.journal.active {
+    cursor: pointer;
+}
+text.label {
+    font - size: 12 px;
+    font - weight: bold;
+    cursor: pointer;
+}
+text.value {
+    font - size: 12 px;
+    font - weight: bold;
+} </style>
+
+</head><body>
+    <form>
+    <label><input type = "radio" name = "mode" value = "total" checked >Total</label>
+    <label><input type = "radio" name = "mode" value = "rallies" >By Rally</label>
+    <label><input type = "radio" name = "mode" value = "games" > By Game </label>
+</form>
+<div id = "gamechart" ></div>
+<div id = "chart0" ></div>
+<div id = "chart1" ></div>
+<div id = "chart2" > </div>
+<div id = "chart3" >
+    <center><h3>Shot Consistency</center></h3 >
+</div>
+<script>
+    function loadCharts(json_out) {
+        var games_json=json_out
+        //the following transform the input into the format required by the grouped bar chart
+        //if the rallies is an empty array neither games or rallies chart shows might need an error
+        //message
+        //
+        //the names aren't consistent so we have to do this
+        var strokeKeyMap = {
+            "backhand": "Backhands",
+            "forehand": "Forehands",
+            "serve": "Serves"
+        };
+        //rename the keys for conistentcy 
+
+        // counts each stroke type by rally
+        var rally_counts = _.map(games_json.rallies, function(x) {
+                return _.countBy(x.rally, "stroke")
+            })
+            // groups data by game number
+        var game = _.groupBy(games_json.rallies, function(x) {
+                return x.game_number
+            })
+            // maps the grouped data to key: game number, value: array of rallies
+        var game2 = _.mapObject(game, function(val, key) {
+                return _.map(val, function(x) {
+                    return x.rally
+                })
+            })
+            // maps the grouped data to key: game number, value: count of strokes
+        var game_counts = _.map(_.mapObject(game2, function(val, key) {
+            return _.flatten(val)
+        }), function(x) {
+            return _.countBy(x, "stroke")
+        })
+
+        //function is required to add the State and ensure all categories are present for the bar chart
+        function add_strokes(data, idx, type) {
+            var tmp = data
+            tmp.State = type + " " + (idx + 1).toString()
+            var names = ['Forehands', 'Backhands', 'Serves']
+            for (s in names) {
+                if (!(_.has(data, names[s]))) {
+                    tmp[names[s]] = 0
+                }
+            }
+            return (tmp)
+        }
+
+        //this is a big waste, we need to change the output from the rallies json
+        rally_counts = _.map(rally_counts, function(data) {
+            var b = {};
+            _.each(data, function(value, key) {
+                key = strokeKeyMap[key] || key;
+                b[key] = value;
+            });
+            return b;
+        });
+
+        game_counts = _.map(game_counts, function(data) {
+            var b = {};
+            _.each(data, function(value, key) {
+                key = strokeKeyMap[key] || key;
+                b[key] = value;
+            });
+            return b;
+        });
+        //the following ensures a zero count and adds the state (e.g. rally / game #)
+        var rallies = _.map(rally_counts, function(x, idx) {
+            return add_strokes(x, idx, "Rally")
+        })
+        console.log(rallies)
+        var games = _.map(game_counts, function(x, idx) {
+            return add_strokes(x, idx, "Game")
+        })
+        var total = games_json.aggregate
+        total.State = "Total"
+
+
+        var margin = {
+            top: 40,
+            right: 20,
+            bottom: 40,
+            left: 20
+        }
+        ww = document.getElementById("chart0").clientWidth,
+            //wh = document.getElementById("chart0").clientHeight,
+            width = ww - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom,
+            radius = Math.min(width, height) / 2 - 30;
+        var FOREHANDS = "Forehands";
+        var BACKHANDS = "Backhands";
+        var SERVES = "Serves";
+        var categories = [FOREHANDS, BACKHANDS, SERVES]
+        var colors = ['#d3d3d3', '#00abff', '#e0162b'];
+
+        var counts = [];
+        counts.push({
+            'letter': FOREHANDS,
+            'frequency': games_json.aggregate[FOREHANDS]
+        });
+        counts.push({
+            'letter': BACKHANDS,
+            'frequency': games_json.aggregate[BACKHANDS]
+        });
+        counts.push({
+            'letter': SERVES,
+            'frequency': games_json.aggregate[SERVES]
+        });
+
+        //var margin = {top: 20, right: 20, bottom: 30, left: 40},
+        //width = 300 - margin.left - margin.right,
+        //height = 400 - margin.top - margin.bottom;
+        d3.selectAll("input").on("change", change);
+
+
+        //total is always an Object, need array for d3
+        var game_data = {
+            "rallies": rallies,
+            "games": games,
+            "total": [total]
+        };
+        console.log(game_data)
+
+        var margin = {
+            top: 40,
+            right: 20,
+            bottom: 40,
+            left: 20
+        }
+        ww = document.getElementById("chart0").clientWidth,
+            //wh = document.getElementById("chart0").clientHeight,
+            width = ww - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+        //radius = Math.min(width, height) / 2 - 30;
+
+
+        //main chart drawing function
+        function drawBarChart(game_data, type) {
+            d3.select("#gamechart").html("");
+
+            var svgg = d3.select("#gamechart").append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .call(d3.behavior.zoom().scaleExtent([1, 1]).on("zoom", zoom));
+
+            var len = game_data[type].length
+
+            var x0 = d3.scale.ordinal()
+                .rangeRoundBands([0, width], .2);
+
+            var x1 = d3.scale.ordinal();
+
+            var y = d3.scale.linear()
+                .range([height, 0]);
+
+            var gxAxis = d3.svg.axis()
+                .scale(x0)
+                .orient("bottom");
+
+            var gyAxis = d3.svg.axis()
+                .scale(y)
+                .orient("left")
+                .tickFormat(d3.format(".1s"));
+            var data = game_data[type]
+            data[0].ages = [{
+                "name": "Forehands",
+                "value": data[0]["Forehands"]
+            }, {
+                "name": "Backhands",
+                "value": data[0]["Backhands"]
+            }, {
+                "name": "Serves",
+                "value": data[0]["Serves"]
+            }]
+            console.log(data)
+            var color = d3.scale.ordinal().domain([0, 2])
+                .range(['#e0162b', '#d3d3d3', '#00abff']);
+
+            var names = d3.keys(data[0]).filter(function(key) {
+                return (key != "State" && key != 'ages');
+            });
+            data.forEach(function(d) {
+                d.ages = [{
+                    "name": "Forehands",
+                    "value": d["Forehands"]
+                }, {
+                    "name": "Backhands",
+                    "value": d["Backhands"]
+                }, {
+                    "name": "Serves",
+                    "value": d["Serves"]
+                }]
+            });
+
+            var names = d3.keys(data[0]).filter(function(key) {
+                return key !== "State" && key != 'ages';
+            });
+            var names = ["Forehands", "Backhands", "Serves"]
+            x0.domain(data.map(function(d) {
+                return d.State;
+            }));
+            x1.domain(names).rangeRoundBands([0, x0.rangeBand()]);
+            y.domain([0, d3.max(data, function(d) {
+                return d3.max(d.ages, function(d) {
+                    return d.value;
+                });
+            })]);
+
+            svgg.append("g")
+                .attr("class", "gx axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(gxAxis);
+
+
+            var allStates = svgg.append("g")
+                .attr("class", "allStates");
+
+            var state = svgg.selectAll(".state")
+                .data(data)
+                .enter().append("g")
+                .attr("class", "state")
+                .attr("transform", function(d) {
+                    return "translate(" + x0(d.State) + ",0)";
+                });
+
+            var state = allStates.selectAll(".state")
+                .data(data)
+                .enter().append("g")
+                .attr("class", "state")
+                .attr("transform", function(d) {
+                    return "translate(" + x0(d.State) + ",0)";
+                });
+
+            state.selectAll("rect")
+                .data(function(d) {
+                    return d.ages;
+                })
+                .enter().append("rect")
+                .attr("width", x1.rangeBand() - 5)
+                .attr("x", function(d) {
+                    return x1(d.name);
+                })
+                .attr("y", function(d) {
+                    return y(d.value);
+                })
+                .attr("height", function(d) {
+                    return height - y(d.value) + 1;
+                })
+                .style("fill", function(d) {
+                    if (d.name == BACKHANDS) {
+                        return color(1);
+                    } else if (d.name == FOREHANDS) {
+                        return color(0);
+                    } else if (d.name == SERVES) {
+                        return color(2);
+                    }
+                });
+
+
+            state.selectAll("text")
+                .data(function(d) {
+                    return d.ages;
+                })
+                .enter()
+                .append("text")
+                .attr("x", function(d) {
+                    return x1(d.name) + x1.rangeBand() / 2
+                })
+                .attr("y", function(d) {
+                    return Math.min(y(d.value) + 20, height - 20);
+                })
+                .attr("text-anchor", "middle")
+                .text(function(d) {
+                    return d.value;
+                })
+                .attr("fill", "white");
+
+            var legnColorGap = height / 17.5;
+
+            var legend = svgg.selectAll(".legend")
+                .data(names)
+                .enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", function(d, i) {
+                    return "translate(0," + i * legnColorGap + ")";
+                });
+
+            var lwidth = width / 75,
+                lht = height / 50,
+                lwidth1 = lwidth + 2;
+            legend.append("rect")
+                .attr("x", width - lwidth1)
+                .attr("width", lwidth)
+                .attr("height", lht)
+                .style("fill", function(d) {
+                    if (d == BACKHANDS) {
+                        return color(1);
+                    } else if (d == FOREHANDS) {
+                        return color(0);
+                    } else if (d == SERVES) {
+                        return color(2);
+                    }
+                });
+
+            var textht = lht / 2,
+                textwd = textht + lwidth;
+
+            legend.append("text")
+                .attr("x", width - textwd)
+                .attr("y", textht)
+                .attr("dy", ".35em")
+                .style("text-anchor", "end")
+                .text(function(d) {
+                    return d;
+                });
+
+            function zoom() {
+                svgg.select(".allStates").attr("transform", "translate(" + d3.event.translate[0] + ",0)scale(" + d3.event.scale + ",1)");
+                svgg.select("g.gx.axis").attr("transform", "translate(" + d3.event.translate[0] + "," + (height) + ")")
+                    .call(gxAxis.scale(x0.rangeRoundBands([0, width * d3.event.scale], .1 * d3.event.scale)));
+                //svgg.select(".y.axis").call(yAxis);
+            }
+
+
+        }
+
+        function change() {
+            var type = this.value
+            drawBarChart(game_data, type)
+        }
+
+        drawBarChart(game_data, "total")
+
+
+        var margin = {
+            top: 40,
+            right: 20,
+            bottom: 40,
+            left: 20
+        }
+        ww = document.getElementById("chart0").clientWidth,
+            //wh = document.getElementById("chart0").clientHeight,
+            width = ww - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom,
+            radius = Math.min(width, height) / 2 - 30;
+        //var categories= [''].concat(Object.keys(json_out.aggregate))
+        var categories = ["Forehands", "Backhands", "Serves"]
+        var colors = ['#e0162b', '#d3d3d3', '#00abff'];
+
+        var counts = []
+        for (key in json_out.aggregate) {
+            counts.push({
+                'letter': key,
+                'frequency': json_out.aggregate[key]
+            })
+        }
+
+
+        var colorScale = d3.scale.ordinal()
+            .domain([0, categories.length])
+            .range(colors);
+
+        /*
+        var x1 = d3.scale.ordinal()
+            .rangeRoundBands([0, width], .2);
+
+        var y1 = d3.scale.linear()
+            .range([height*.5, 0]);
+
+        var xAxis1 = d3.svg.axis()
+            .scale(x1)
+            .orient("bottom");
+
+        var yAxis1 = d3.svg.axis()
+            .scale(y1)
+            .orient("left")
+            .tickFormat(function (d) { return ''; })
+            .ticks(0, "%");
+
+        var svg1 = d3.select("#chart0").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height*.5 + margin.top + margin.bottom)
+          .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+          x1.domain(counts.map(function(d) { return d.letter; }));
+          y1.domain([0, d3.max(counts, function(d) { return d.frequency; })]);
+
+          svg1.append("g")
+              .attr("class", "x axis")
+              .attr("id","xaxis_bar")
+              .attr("transform", "translate(0," + height*.5 + ")")
+              .call(xAxis1);
+
+          svg1.append("g")
+              .attr("class", "y axis")
+              .call(yAxis1)
+
+        svg1.select('#xaxis_bar').selectAll('g.tick').selectAll('text').attr('font-size','12px').attr('font-weight','bold').attr('fill', function(d,i){if(d=='Backhands'){
+                    return colorScale(2);
+                }
+                else if(d=='Forehands'){
+                    return colorScale(1);
+                }
+                else if(d=='Serves'){
+                    return colorScale(3);
+                }});
+
+          svg1.append("g").selectAll(".bar")
+            .attr("id","bars")
+              .data(counts)
+            .enter().append("rect")
+              .attr("class", "bar")
+              .attr("x", function(d) { return x1(d.letter); })
+              .attr("width", x1.rangeBand())
+              .attr("y", function(d) { return Math.min(y1(d.frequency),175); })
+              .attr("fill", function(d,i){
+                if(d.letter=='Backhands'){
+                    return colorScale(2);
+                }
+                else if(d.letter=='Forehands'){
+                    return colorScale(1);
+                }
+                else if(d.letter=='Serves'){
+                    return colorScale(3);
+                }})
+              .attr("height", function(d) {return height*.5 - Math.min(y1(d.frequency),175); });
+
+
+          svg1.append("g").selectAll("text")
+              .data(counts)
+              .enter()
+              .append("text")
+              .attr("x", function(d) { return x1(d.letter)+x1.rangeBand()/2})
+              .attr("y", function(d) { return Math.min(y1(d.frequency) + 20,height*.5-20); })
+              .attr("text-anchor", "middle")
+              .text(function(d) { return d.frequency;})
+              .attr("fill", "white");
+
+
+        function type(d) {
+          d.frequency = +d.frequency;
+          return d;
+        }
+
+        /
+         
+         // var json_out=JSON.parse(json_out)
+
+                var counts=[]
+                for(key in json_out.aggregate){
+                    counts.push(json_out.aggregate[key])
+                }
+
+            
+
+                var grid = d3.range(25).map(function(i){
+                    return {'x1':0,'y1':0,'x2':0,'y2':20};
+                });
+
+                var tickVals = grid.map(function(d,i){
+                    if(i>0){ return i*50; }
+                    else if(i===0){ return "50";}
+                });
+
+
+                var xscale = d3.scale.linear()
+                                .domain([0,Math.max(...counts)])
+                                .range([0,width]);
+
+                var yscale = d3.scale.linear()
+                                .domain([0,categories.length])
+                                .range([0,height/2]);
+
+                
+                                
+                var canvas = d3.select('#chart1')
+                                .append('svg')
+                                .attr({'width':width,'height':height/3});
+
+                var xAxis = d3.svg.axis();
+                    xAxis
+                        .orient('bottom')
+                        .scale(xscale)
+                        .tickValues(tickVals);
+
+                var yAxis = d3.svg.axis();
+                    yAxis
+                        .orient('left')
+                        .scale(yscale)
+                        .tickSize(2)
+                        .tickFormat(function(d,i){ return categories[i]; })
+                        .tickValues(d3.range(4));
+
+                var y_xis = canvas.append('g')
+                                  .attr("transform", "translate(80,-35)")
+                                  .attr('id','yaxis')
+                                  .attr('opacity','white')
+                                  .call(yAxis);
+
+                var chart = canvas.append('g')
+                                    .attr("transform", "translate(90,0)")
+                                    .attr('id','bars')
+                                    .selectAll('rect')
+                                    .data(counts)
+                                    .enter()
+                                    .append('rect')
+                                    .attr('height',40)
+                                    .attr({'x':0,'y':function(d,i){ return yscale(i) }})
+                                    .style('fill',function(d,i){return colorScale(i); })
+                                    .attr('width',function(d){ return 0; });
+
+                console.log(canvas.select('#yaxis').selectAll('g.tick').selectAll('text'))
+                canvas.select('#yaxis').selectAll('g.tick').selectAll('text').attr('font-weight','bold').attr('fill', function(d,i){return colorScale(d-1)});
+
+                var transit = d3.select("svg").selectAll("rect")
+                                    .data(counts)
+                                    .transition()
+                                    .duration(1000)
+                                    .attr("width", function(d) {return Math.max(xscale(d)-20-margin.right,20); });
+
+              //  transit.append("div")
+                //    .style("display", "inline")
+                  //  .text(function(d, i){ return categories[i]; });
+
+                var transitext = d3.select('#bars')
+                                    .selectAll('text')
+                                    .data(counts)
+                                    .enter()
+                                    .append('text')
+                                    .attr({'x':function(d) {return Math.max(xscale(d)-90-margin.right,5); },'y':function(d,i){ return yscale(i)+20; }})
+                                    .text(function(d){ return d; })
+                                    .style({'fill':'#fff','font-size':'14px'});
+            */
+    function truncate(str, maxLength, suffix) {
+    if(str.length > maxLength) {
+        str = str.substring(0, maxLength + 1);
+        str = str.substring(0, Math.min(str.length, str.lastIndexOf(" ")));
+        str = str + suffix;
+    }
+    return str;
+    }
+
+
+    var c = d3.scale.category20c();
+
+    var x = d3.scale.linear()
+        .range([0, width]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("top");
+
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+    Array.min = function( array ){
+        return Math.min.apply( Math, array );
+    };
+
+    var timeFormat = d3.time.format("%I:%M %p %a %Y");
+
+    var svg = d3.select('#chart2')
+            .append('svg')
+            .attr("width", width+margin.left+margin.right)
+            .attr("height", height/2)
+            .style("margin-left", margin.left + "px")
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+    var ts=[]
+    for(key in json_out.timestamped){
+        for(i in json_out.timestamped[key]){
+            ts.push(json_out.timestamped[key][i].time)
+        }
+    }
+    //console.log(json_out.timestamped)
+    //json_out.timestamped[0] = json_out.timestamped.splice(1, 1, json_out.timestamped[0])[0];
+
+    x.domain([Math.min(...ts),Math.max(...ts)]);
+
+    var xScale = d3.scale.linear()
+    .domain([Math.min(...ts),Math.max(...ts)])
+    .range([0,width*.75]);
+
+    var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .tickValues(x.domain())
+                  .tickFormat(function(d){return d3.time.format("%I:%M %p") (new Date(d));})
+                  .orient("bottom");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(50," + 100 + ")")
+        .call(xAxis);
+
+    // for (var j = 0; j < json_out.timestamped.length; j++) {
+    var m = -1;
+    for (var j in json_out.timestamped) {
+        m++;
+        var g = svg.append("g").attr("class","journal");
+        // var name=json_out.timestamped[j]['name'];
+        var name=j;
+        var circles = g.selectAll("circle")
+            .data(json_out.timestamped[j])
+            .enter()
+            .append("circle");
+
+        var text = g.selectAll("text")
+            .data(json_out.timestamped[j])
+            .enter()
+            .append("text");
+
+        var rScale = d3.scale.linear()
+            .domain([0, d3.max(json_out.timestamped[j], function(d) { return Math.round(d.max_speed); })])
+            .range([2, 9]);
+
+        circles
+            .attr("cx", function(d, i) {return xScale(d.time); })
+            .attr("cy", m*20+20)
+            .attr("r", function(d) { return 0.5*rScale(d.max_speed); })
+            .attr("transform", "translate(60," + 0 + ")")
+            .style("fill", function(d) {if(name==BACKHANDS){
+            return colorScale(2);
+                }
+                else if(name==FOREHANDS){
+                    return colorScale(1);
+                }
+                else if(name==SERVES){
+                    return colorScale(3);
+                }});
+
+        text
+            .attr("y", m*20+25)
+            .attr("x",function(d, i) { return xScale(d.time); })
+            .attr("class","value")
+            .text(function(d){ return Math.round(d.max_speed); })
+            .style("fill", function(d) {if(name==BACKHANDS){
+            return colorScale(2);
+                }
+                else if(name==FOREHANDS){
+                    return colorScale(1);
+                }
+                else if(name==SERVES){
+                    return colorScale(3);
+                }})
+            .attr("transform", "translate(60," + 0 + ")")
+            .style("display","none");
+
+        g.append("text")
+            .attr("y", m*20+25)
+            .attr("x",-20)
+            .attr("class","label")
+            .text(truncate(name,30,"..."))
+            .style("fill", function(d) {if(name==BACKHANDS){
+            return colorScale(2);
+                }
+                else if(name==FOREHANDS){
+                    return colorScale(1);
+                }
+                else if(name==SERVES){
+                    return colorScale(3);
+                }})
+            .on("mouseover", mouseover)
+            .on("mouseout", mouseout);
+    };
+
+    function mouseover(p) {
+        var g = d3.select(this).node().parentNode;
+        d3.select(g).selectAll("circle").style("display","none");
+        d3.select(g).selectAll("text.value").style("display","block");
+    }
+
+    function mouseout(p) {
+        var g = d3.select(this).node().parentNode;
+        d3.select(g).selectAll("circle").style("display","block");
+        d3.select(g).selectAll("text.value").style("display","none");
+    }
+
+    // left off here...
+    var keys = [];
+    console.log(JSON.stringify(json_out.timestamped));
+    for(var kk in json_out.timestamped){
+        keys.push(kk);
+    }
+    console.log(keys);
+    var acc=_.map(keys,function(x){return([json_out.timestamped[x],x])});
+    //var acc=_.map(json_out.timestamped,function(x){return([x.swings,x.name])});
+    console.log(acc);
+
+    acc=_.flatten(_.map(acc,function(x){return _.map(x[0],function(y){return [y.max_acceleration,x[1]]})}),true)
+    // acc=_.flatten(_.map(acc,function(x){return _.map(x[0],function(y){return [y[1],x[1]]})}),true)
+    swings=_.map(acc, function(x){return x[0]})
+    //var percentiles=_.map(acc,function(x){return ss.quantile(acc,x)})
+    //acc.sort(function(a, b){return a-b});
+    ecdf=[]
+    var uniq_stroke=_.uniq(acc)
+    for(var i=0;i<swings.length;i++){
+        var count=_.map(swings,function(x){return x<=swings[i]})
+        var count2=_.reduce(count, function(memo, num){ return memo + num; }, 0);
+        ecdf.push(count2)
+    }
+    n_stroke = acc.length
+    qdist=_.map(ecdf,function(x){return Math.abs(0.5-x/n_stroke)})
+    data=_.zip(_.map(d3.range(0, 360, 360/n_stroke),function(x){return (Math.PI*x)/180}),qdist,_.map(acc,function(x){return x[1]}))
+    //this filters edge case in which some strokes are zero causing black dots
+    data = _.filter(data, function(x){return !_.isUndefined(x[1])})
+    
+    var r = d3.scale.linear()
+      .domain([0, 1])
+      .range([0, radius]);
+
+    var line = d3.svg.line.radial()
+      .radius(function(d) {
+        return r(d[1]);
+      })
+      .angle(function(d) {
+        return -d[0] + Math.PI / 2;
+      });
+
+    var svg = d3.select("#chart3").append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .append("g")
+      .attr("transform", "translate(" + width / 2 + "," + height / 2.3 + ")");
+
+
+    var gr = svg.append("g")
+      .attr("class", "r axis")
+      .selectAll("g")
+      .data(r.ticks(4).slice(2,6))
+      .enter().append("g");
+
+
+    gr.append("circle")
+      .attr("r", r);
+
+
+    var ga = svg.append("g")
+      .attr("class", "a axis")
+      .selectAll("g")
+      .data(d3.range(0, 360, 360/n_stroke))
+      .enter().append("g")
+      .attr("transform", function(d) {
+        return "rotate(" + -d + ")";
+      });
+
+    ga.append("line")
+      .attr("x2", radius);
+
+    var color = d3.scale.category20();
+
+    var line = d3.svg.line.radial()
+      .radius(function(d) {
+        return r(d[1]);
+      })
+      .angle(function(d) {
+        return -d[0] + Math.PI / 2;
+      });
+
+
+    svg.selectAll("point")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", "point")
+      .attr("transform", function(d) {
+        var coors = line([d]).slice(1).slice(0, -1);
+        return "translate(" + coors + ")"
+      })
+      .attr("r", 8)
+      .attr("fill",function(d,i){
+        console.log(d)
+        if(d[2]==BACKHANDS){
+            return colorScale(2);
+        }
+        else if(d[2]==FOREHANDS){
+            return colorScale(1);
+        }
+       else if(d[2]==SERVES){
+            return colorScale(3);
+        }
+      });
+
+}
+
+
+
+loadCharts(JSON.stringify());
+</script></body></html>

@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mymenu">
+    <item android:id="@+id/mainapp"
+        android:title="Play"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/sessions"
+        android:title="Match Stats"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/profilepage"
+        android:title="User Stats"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/profile_settings"
+        android:title="Settings"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/feedback"
+        android:title="FAQ"
+        android:orderInCategory="100"
+        app:showAsAction="always"/>
+    <item android:id="@+id/sign_in_out"
+        android:title="Sign in with Google"
+          android:orderInCategory="100"
+        app:showAsAction="always"/>
+</menu>
+
+
